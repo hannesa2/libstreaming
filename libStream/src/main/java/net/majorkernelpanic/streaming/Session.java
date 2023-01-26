@@ -40,24 +40,24 @@ import android.os.Looper;
 /**
  * You should instantiate this class with the {@link SessionBuilder}.<br />
  * This is the class you will want to use to stream audio and or video to some peer using RTP.<br />
- * 
- * It holds a {@link VideoStream} and a {@link AudioStream} together and provides 
+ *
+ * It holds a {@link VideoStream} and a {@link AudioStream} together and provides
  * synchronous and asynchronous functions to start and stop those steams.
  * You should implement a callback interface {@link Callback} to receive notifications and error reports.<br />
- * 
+ *
  * If you want to stream to a RTSP server, you will need an instance of this class and hand it to a {@link RtspClient}.
- * 
- * If you don't use the RTSP protocol, you will still need to send a session description to the receiver 
- * for him to be able to decode your audio/video streams. You can obtain this session description by calling 
- * {@link #configure()} or {@link #syncConfigure()} to configure the session with its parameters 
+ *
+ * If you don't use the RTSP protocol, you will still need to send a session description to the receiver
+ * for him to be able to decode your audio/video streams. You can obtain this session description by calling
+ * {@link #configure()} or {@link #syncConfigure()} to configure the session with its parameters
  * (audio samplingrate, video resolution) and then {@link Session#getSessionDescription()}.<br />
- * 
- * See the example 2 here: https://github.com/fyhertz/libstreaming-examples to 
+ *
+ * See the example 2 here: https://github.com/fyhertz/libstreaming-examples to
  * see an example of how to get a SDP.<br />
- * 
- * See the example 3 here: https://github.com/fyhertz/libstreaming-examples to 
+ *
+ * See the example 3 here: https://github.com/fyhertz/libstreaming-examples to
  * see an example of how to stream to a RTSP server.<br />
- * 
+ *
  */
 public class Session {
 
@@ -73,10 +73,10 @@ public class Session {
 	/** The phone may not support some net.majorkernelpanic.streaming parameters that you are trying to use (bit rate, frame rate, resolution...). */
 	public final static int ERROR_CONFIGURATION_NOT_SUPPORTED = 0x01;
 
-	/** 
-	 * The internal storage of the phone is not ready. 
+	/**
+	 * The internal storage of the phone is not ready.
 	 * libstreaming tried to store a test file on the sdcard but couldn't.
-	 * See H264Stream and AACStream to find out why libstreaming would want to something like that. 
+	 * See H264Stream and AACStream to find out why libstreaming would want to something like that.
 	 */
 	public final static int ERROR_STORAGE_NOT_READY = 0x02;
 
@@ -86,8 +86,8 @@ public class Session {
 	/** The supplied SurfaceView is not a valid surface, or has not been created yet. */
 	public final static int ERROR_INVALID_SURFACE = 0x04;
 
-	/** 
-	 * The destination set with {@link Session#setDestination(String)} could not be resolved. 
+	/**
+	 * The destination set with {@link Session#setDestination(String)} could not be resolved.
 	 * May mean that the phone has no access to the internet, or that the DNS server could not
 	 * resolved the host name.
 	 */
@@ -111,7 +111,7 @@ public class Session {
 
 	private Handler mHandler;
 
-	/** 
+	/**
 	 * Creates a net.majorkernelpanic.streaming session that can be customized by adding tracks.
 	 */
 	public Session() {
@@ -132,8 +132,8 @@ public class Session {
 	 */
 	public interface Callback {
 
-		/** 
-		 * Called periodically to inform you on the bandwidth 
+		/**
+		 * Called periodically to inform you on the bandwidth
 		 * consumption of the streams when net.majorkernelpanic.streaming.
 		 */
 		public void onBitrateUpdate(long bitrate);
@@ -141,7 +141,7 @@ public class Session {
 		/** Called when some error occurs. */
 		public void onSessionError(int reason, int streamType, Exception e);
 
-		/** 
+		/**
 		 * Called when the previw of the {@link VideoStream}
 		 * has correctly been started.
 		 * If an error occurs while starting the preview,
@@ -150,8 +150,8 @@ public class Session {
 		 */
 		public void onPreviewStarted();
 
-		/** 
-		 * Called when the session has correctly been configured 
+		/**
+		 * Called when the session has correctly been configured
 		 * after calling {@link Session#configure()}.
 		 * If an error occurs while configuring the {@link Session},
 		 * {@link Callback#onSessionError(int, int, Exception)} will be
@@ -159,11 +159,11 @@ public class Session {
 		 */
 		public void onSessionConfigured();
 
-		/** 
+		/**
 		 * Called when the streams of the session have correctly been started.
 		 * If an error occurs while starting the {@link Session},
 		 * {@link Callback#onSessionError(int, int, Exception)} will be
-		 * called instead of  {@link Callback#onSessionStarted()}. 
+		 * called instead of  {@link Callback#onSessionStarted()}.
 		 */
 		public void onSessionStarted();
 
@@ -208,7 +208,7 @@ public class Session {
 	/** Returns the underlying {@link VideoStream} used by the {@link Session}. */
 	public VideoStream getVideoTrack() {
 		return mVideoStream;
-	}	
+	}
 
 	/**
 	 * Sets the callback interface that will be called by the {@link Session}.
@@ -216,18 +216,18 @@ public class Session {
 	 */
 	public void setCallback(Callback callback) {
 		mCallback = callback;
-	}	
+	}
 
-	/** 
+	/**
 	 * The origin address of the session.
 	 * It appears in the session description.
 	 * @param origin The origin address
 	 */
 	public void setOrigin(String origin) {
 		mOrigin = origin;
-	}	
+	}
 
-	/** 
+	/**
 	 * The destination address for all the streams of the session. <br />
 	 * Changes will be taken into account the next time you start the session.
 	 * @param destination The destination address
@@ -236,7 +236,7 @@ public class Session {
 		mDestination =  destination;
 	}
 
-	/** 
+	/**
 	 * Set the TTL of all packets sent during the session. <br />
 	 * Changes will be taken into account the next time you start the session.
 	 * @param ttl The Time To Live
@@ -245,9 +245,9 @@ public class Session {
 		mTimeToLive = ttl;
 	}
 
-	/** 
+	/**
 	 * Sets the configuration of the stream. <br />
-	 * You can call this method at any time and changes will take 
+	 * You can call this method at any time and changes will take
 	 * effect next time you call {@link #configure()}.
 	 * @param quality Quality of the stream
 	 */
@@ -259,7 +259,7 @@ public class Session {
 
 	/**
 	 * Sets a Surface to show a preview of recorded media (video). <br />
-	 * You can call this method at any time and changes will take 
+	 * You can call this method at any time and changes will take
 	 * effect next time you call {@link #start()} or {@link #startPreview()}.
 	 */
 	public void setSurfaceView(final SurfaceView view) {
@@ -269,13 +269,13 @@ public class Session {
 				if (mVideoStream != null) {
 					mVideoStream.setSurfaceView(view);
 				}
-			}				
+			}
 		});
 	}
 
-	/** 
+	/**
 	 * Sets the orientation of the preview. <br />
-	 * You can call this method at any time and changes will take 
+	 * You can call this method at any time and changes will take
 	 * effect next time you call {@link #configure()}.
 	 * @param orientation The orientation of the preview
 	 */
@@ -283,11 +283,11 @@ public class Session {
 		if (mVideoStream != null) {
 			mVideoStream.setPreviewOrientation(orientation);
 		}
-	}	
+	}
 
-	/** 
+	/**
 	 * Sets the configuration of the stream. <br />
-	 * You can call this method at any time and changes will take 
+	 * You can call this method at any time and changes will take
 	 * effect next time you call {@link #configure()}.
 	 * @param quality Quality of the stream
 	 */
@@ -298,14 +298,14 @@ public class Session {
 	}
 
 	/**
-	 * Returns the {@link Callback} interface that was set with 
+	 * Returns the {@link Callback} interface that was set with
 	 * {@link #setCallback(Callback)} or null if none was set.
 	 */
 	public Callback getCallback() {
 		return mCallback;
-	}	
+	}
 
-	/** 
+	/**
 	 * Returns a Session Description that can be stored in a file or sent to a client with RTSP.
 	 * @return The Session Description.
 	 * @throws IllegalStateException Thrown when {@link #setDestination(String)} has never been called.
@@ -332,7 +332,7 @@ public class Session {
 		if (mVideoStream != null) {
 			sessionDescription.append(mVideoStream.getSessionDescription());
 			sessionDescription.append("a=control:trackID="+1+"\r\n");
-		}			
+		}
 		return sessionDescription.toString();
 	}
 
@@ -354,7 +354,7 @@ public class Session {
 		return (mAudioStream!=null && mAudioStream.isStreaming()) || (mVideoStream!=null && mVideoStream.isStreaming());
 	}
 
-	/** 
+	/**
 	 * Configures all streams of the session.
 	 **/
 	public void configure() {
@@ -366,19 +366,19 @@ public class Session {
 				} catch (Exception e) {};
 			}
 		});
-	}	
+	}
 
-	/** 
+	/**
 	 * Does the same thing as {@link #configure()}, but in a synchronous manner. <br />
-	 * Throws exceptions in addition to calling a callback 
+	 * Throws exceptions in addition to calling a callback
 	 * {@link Callback#onSessionError(int, int, Exception)} when
-	 * an error occurs.	
+	 * an error occurs.
 	 **/
-	public void syncConfigure()  
-			throws CameraInUseException, 
+	public void syncConfigure()
+			throws CameraInUseException,
 			StorageUnavailableException,
-			ConfNotSupportedException, 
-			InvalidSurfaceException, 
+			ConfNotSupportedException,
+			InvalidSurfaceException,
 			RuntimeException,
 			IOException {
 
@@ -411,7 +411,7 @@ public class Session {
 		postSessionConfigured();
 	}
 
-	/** 
+	/**
 	 * Asynchronously starts all streams of the session.
 	 **/
 	public void start() {
@@ -421,20 +421,20 @@ public class Session {
 				try {
 					syncStart();
 				} catch (Exception e) {}
-			}				
+			}
 		});
 	}
 
-	/** 
+	/**
 	 * Starts a stream in a synchronous manner. <br />
 	 * Throws exceptions in addition to calling a callback.
 	 * @param id The id of the stream to start
 	 **/
-	public void syncStart(int id) 			
-			throws CameraInUseException, 
+	public void syncStart(int id)
+			throws CameraInUseException,
 			StorageUnavailableException,
-			ConfNotSupportedException, 
-			InvalidSurfaceException, 
+			ConfNotSupportedException,
+			InvalidSurfaceException,
 			UnknownHostException,
 			IOException {
 
@@ -475,17 +475,17 @@ public class Session {
 			}
 		}
 
-	}	
+	}
 
-	/** 
-	 * Does the same thing as {@link #start()}, but in a synchronous manner. <br /> 
+	/**
+	 * Does the same thing as {@link #start()}, but in a synchronous manner. <br />
 	 * Throws exceptions in addition to calling a callback.
 	 **/
-	public void syncStart() 			
-			throws CameraInUseException, 
+	public void syncStart()
+			throws CameraInUseException,
 			StorageUnavailableException,
-			ConfNotSupportedException, 
-			InvalidSurfaceException, 
+			ConfNotSupportedException,
+			InvalidSurfaceException,
 			UnknownHostException,
 			IOException {
 
@@ -500,7 +500,7 @@ public class Session {
 			throw e;
 		}
 
-	}	
+	}
 
 	/** Stops all existing streams. */
 	public void stop() {
@@ -512,16 +512,16 @@ public class Session {
 		});
 	}
 
-	/** 
+	/**
 	 * Stops one stream in a synchronous manner.
 	 * @param id The id of the stream to stop
-	 **/	
+	 **/
 	private void syncStop(final int id) {
 		Stream stream = id==0 ? mAudioStream : mVideoStream;
 		if (stream!=null) {
 			stream.stop();
 		}
-	}		
+	}
 
 	/** Stops all existing streams in a synchronous manner. */
 	public void syncStop() {
@@ -575,7 +575,7 @@ public class Session {
 				}
 			}
 		});
-	}	
+	}
 
 	/**	Switch between the front facing and the back facing camera of the phone. <br />
 	 * If {@link #startPreview()} has been called, the preview will be  briefly interrupted. <br />
@@ -608,7 +608,7 @@ public class Session {
 
 	/**
 	 * Returns the id of the camera currently selected. <br />
-	 * It can be either {@link CameraInfo#CAMERA_FACING_BACK} or 
+	 * It can be either {@link CameraInfo#CAMERA_FACING_BACK} or
 	 * {@link CameraInfo#CAMERA_FACING_FRONT}.
 	 */
 	public int getCamera() {
@@ -616,9 +616,9 @@ public class Session {
 
 	}
 
-	/** 
+	/**
 	 * Toggles the LED of the phone if it has one.
-	 * You can get the current state of the flash with 
+	 * You can get the current state of the flash with
 	 * {@link Session#getVideoTrack()} and {@link VideoStream#getFlashState()}.
 	 **/
 	public void toggleFlash() {
@@ -634,7 +634,7 @@ public class Session {
 				}
 			}
 		});
-	}	
+	}
 
 	/** Deletes all existing tracks & release associated resources. */
 	public void release() {
@@ -648,7 +648,7 @@ public class Session {
 			@Override
 			public void run() {
 				if (mCallback != null) {
-					mCallback.onPreviewStarted(); 
+					mCallback.onPreviewStarted();
 				}
 			}
 		});
@@ -659,7 +659,7 @@ public class Session {
 			@Override
 			public void run() {
 				if (mCallback != null) {
-					mCallback.onSessionConfigured(); 
+					mCallback.onSessionConfigured();
 				}
 			}
 		});
@@ -670,33 +670,33 @@ public class Session {
 			@Override
 			public void run() {
 				if (mCallback != null) {
-					mCallback.onSessionStarted(); 
+					mCallback.onSessionStarted();
 				}
 			}
 		});
-	}		
+	}
 
 	private void postSessionStopped() {
 		mMainHandler.post(new Runnable() {
 			@Override
 			public void run() {
 				if (mCallback != null) {
-					mCallback.onSessionStopped(); 
+					mCallback.onSessionStopped();
 				}
 			}
 		});
-	}	
+	}
 
 	private void postError(final int reason, final int streamType,final Exception e) {
 		mMainHandler.post(new Runnable() {
 			@Override
 			public void run() {
 				if (mCallback != null) {
-					mCallback.onSessionError(reason, streamType, e); 
+					mCallback.onSessionError(reason, streamType, e);
 				}
 			}
 		});
-	}	
+	}
 
 	private void postBitRate(final long bitrate) {
 		mMainHandler.post(new Runnable() {
@@ -707,12 +707,12 @@ public class Session {
 				}
 			}
 		});
-	}		
+	}
 
 	private Runnable mUpdateBitrate = new Runnable() {
 		@Override
 		public void run() {
-			if (isStreaming()) { 
+			if (isStreaming()) {
 				postBitRate(getBitrate());
 				mHandler.postDelayed(mUpdateBitrate, 500);
 			} else {
@@ -723,7 +723,7 @@ public class Session {
 
 
 	public boolean trackExists(int id) {
-		if (id==0) 
+		if (id==0)
 			return mAudioStream!=null;
 		else
 			return mVideoStream!=null;
